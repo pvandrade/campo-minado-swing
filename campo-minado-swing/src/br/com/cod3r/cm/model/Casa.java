@@ -3,8 +3,6 @@ package br.com.cod3r.cm.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.cod3r.cm.exception.ExplosionException;
-
 public class Casa {
 	private final int linha;
 	private final int coluna;
@@ -50,7 +48,7 @@ public class Casa {
 		if (!aberta && !marcada) {
 			aberta = true;
 			if (minada) {
-				throw new ExplosionException();
+				// TODO implementar nova versão
 			}
 			if (vizinhancaSegura()) {
 				vizinhanca.forEach(v -> v.abrir());
@@ -107,19 +105,5 @@ public class Casa {
 		aberta = false;
 		minada = false;
 		marcada = false;
-	}
-	
-	public String toString() {
-		if (marcada) {
-			return "x";
-		} else if (aberta && minada) {
-			return "*";
-		} else if (aberta && minasVizinhanca() > 0) {
-			return Long.toString(minasVizinhanca());
-		} else if (aberta) {
-			return " ";
-		} else {
-			return "?";
-		}
 	}
 }
