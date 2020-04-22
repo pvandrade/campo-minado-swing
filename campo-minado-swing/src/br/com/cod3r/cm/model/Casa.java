@@ -12,10 +12,19 @@ public class Casa {
 	private boolean marcada;
 	
 	private List<Casa> vizinhanca = new ArrayList<>();
+	private List<CasaObservador> observadores = new ArrayList<>();
 	
 	Casa(int linha, int coluna) {
 		this.linha = linha;
 		this.coluna = coluna;
+	}
+	
+	public void registrarObservador(CasaObservador observador) {
+		observadores.add(observador);
+	}
+	
+	private void notificarObservadores(CasaEvento evento) {
+		observadores.stream().forEach(o -> o.eventoOcorreu(this, evento));
 	}
 	
 	boolean addVizinho(Casa vizinho) {
@@ -41,15 +50,22 @@ public class Casa {
 	void addMarcacao() {
 		if (!aberta) {
 			marcada = !marcada;
+			if(marcada) {
+				notificarObservadores(CasaEvento.MARCAR);
+			} else {
+				notificarObservadores(CasaEvento.DESMARCAR);
+			}
 		}
 	}
 	
 	boolean abrir() {
 		if (!aberta && !marcada) {
-			aberta = true;
 			if (minada) {
-				// TODO implementar nova versão
+				notificarObservadores(CasaEvento.EXPLODIR);
+				return true;
 			}
+			setAberta(true);
+			
 			if (vizinhancaSegura()) {
 				vizinhanca.forEach(v -> v.abrir());
 			}
@@ -77,6 +93,8 @@ public class Casa {
 	
 	void setAberta(boolean aberta) {
 		this.aberta = aberta;
+		if (aberta)
+			notificarObservadores(CasaEvento.ABRIR);
 	}
 	
 	public boolean isAberta() {
