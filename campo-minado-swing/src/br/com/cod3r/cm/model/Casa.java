@@ -47,7 +47,7 @@ public class Casa {
 		}
 	}
 	
-	void addMarcacao() {
+	public void addMarcacao() {
 		if (!aberta) {
 			marcada = !marcada;
 			if(marcada) {
@@ -58,7 +58,7 @@ public class Casa {
 		}
 	}
 	
-	boolean abrir() {
+	public boolean abrir() {
 		if (!aberta && !marcada) {
 			if (minada) {
 				notificarObservadores(CasaEvento.EXPLODIR);
@@ -75,7 +75,7 @@ public class Casa {
 		}
 	}	
 	
-	boolean vizinhancaSegura() {
+	public boolean vizinhancaSegura() {
 		return vizinhanca.stream().noneMatch(v -> v.minada);
 	}
 	
@@ -115,13 +115,14 @@ public class Casa {
 		return desvendada || protegida;
 	}
 	
-	long minasVizinhanca() {
-		return vizinhanca.stream().filter(v -> v.minada).count();
+	public int minasVizinhanca() {
+		return (int) vizinhanca.stream().filter(v -> v.minada).count();
 	}
 	
 	void reiniciar() {
 		aberta = false;
 		minada = false;
 		marcada = false;
+		notificarObservadores(CasaEvento.REINICIAR);
 	}
 }
