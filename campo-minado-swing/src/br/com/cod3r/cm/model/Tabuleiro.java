@@ -7,9 +7,9 @@ import java.util.function.Predicate;
 
 public class Tabuleiro implements CasaObservador {
 	
-	private int linhas;
-	private int colunas;
-	private int minas;
+	private final int linhas;
+	private final int colunas;
+	private final int minas;
 	
 	private final List<Casa> casas = new ArrayList<>();
 	private final List<Consumer<ResultadoEvento>> observadores = new ArrayList<>();
@@ -22,6 +22,10 @@ public class Tabuleiro implements CasaObservador {
 		gerarCasas();
 		associarVizinhos();
 		sortearMinas();
+	}
+	
+	public void paraCada(Consumer<Casa> funcao) {
+		casas.forEach(funcao);
 	}
 	
 	public void registrarObservador(Consumer<ResultadoEvento> observador) {
@@ -81,6 +85,14 @@ public class Tabuleiro implements CasaObservador {
 	public void reiniciar() {
 		casas.stream().forEach(c -> c.reiniciar());
 		sortearMinas();
+	}
+
+	public int getLinhas() {
+		return linhas;
+	}
+
+	public int getColunas() {
+		return colunas;
 	}
 
 	@Override
